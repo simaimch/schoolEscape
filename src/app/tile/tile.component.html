@@ -1,0 +1,26 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" class="tile" [style.grid-column]="tile.x" [style.grid-column-end]="tile.x+5" [style.grid-row]="tile.y" [style.grid-row-end]="tile.y+5" preserveAspectRatio="none">
+  <!-- Horizontal lines -->
+  <g stroke="gray">
+    <line x1="0" y1="0" x2="500" y2="0" stroke-width="1" />
+    <line x1="0" y1="100" x2="500" y2="100" stroke-width="1" />
+    <line x1="0" y1="200" x2="500" y2="200" stroke-width="1" />
+    <line x1="0" y1="300" x2="500" y2="300" stroke-width="1" />
+    <line x1="0" y1="400" x2="500" y2="400" stroke-width="1" />
+    <line x1="0" y1="500" x2="500" y2="500" stroke-width="1" />
+  </g>
+  <!-- Vertical lines -->
+  <g stroke="gray">
+    <line x1="0" y1="0" x2="0" y2="500" stroke-width="1" />
+    <line x1="100" y1="0" x2="100" y2="500" stroke-width="1" />
+    <line x1="200" y1="0" x2="200" y2="500" stroke-width="1" />
+    <line x1="300" y1="0" x2="300" y2="500" stroke-width="1" />
+    <line x1="400" y1="0" x2="400" y2="500" stroke-width="1" />
+    <line x1="500" y1="0" x2="500" y2="500" stroke-width="1" />
+  </g>
+  <g stroke="gray">
+    <line *ngFor="let wall of wallsWithAbsoluteCoordinates" [attr.x1]="wall.x1*100" [attr.x2]="wall.x2*100" [attr.y1]="wall.y1*100" [attr.y2]="wall.y2*100" stroke-width="3">
+
+    </line>
+  </g>
+</svg>
+

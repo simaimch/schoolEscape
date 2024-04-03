@@ -1,0 +1,4 @@
+<div *ngFor="let keyValuePair of getAllGamesAsKeyValuePair()">
+  <a [routerLink]="['/game', keyValuePair.key]">Load {{keyValuePair.value.name}}</a>
+  <a (click)="deleteGame(keyValuePair.key)">del</a>
+</div>

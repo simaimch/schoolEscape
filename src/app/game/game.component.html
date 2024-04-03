@@ -1,0 +1,30 @@
+<h2>Game {{game.name}}</h2>
+<div>
+  <label for="name">Game name: </label>
+  <input #editedGame id="name" [value]="game.name" placeholder="name" (change)="updateName(editedGame.value)">
+</div>
+
+<div id="wallInformation">
+  <p *ngFor="let wall of wallsWithGlobalPositions">{{wall.position.position1.x}}:{{wall.position.position1.y}} / {{wall.position.position2.x}}:{{wall.position.position2.y}}</p>
+</div>
+
+<div id="field">
+  <app-tile
+    *ngFor="let tile of tiles"
+    [tile]="tile"
+
+  ></app-tile>
+
+  <app-reachable-position
+    *ngFor="let rpos of reachablePositions"
+    [rpos]="rpos"
+    (activatePosition)="activatePosition($event)"
+  ></app-reachable-position>
+
+  <app-pawn
+    *ngFor="let keyValuePair of getAllPawnsAsKeyValuePair()"
+    [pawn]="keyValuePair.value"
+    [pawnId]="keyValuePair.key"
+    (updateSelectedPawn)="updateSelectedPawn($event)"
+  ></app-pawn>
+</div>

@@ -1,0 +1,8 @@
+<div
+  class="pawn"
+  [style.grid-column]="pawn.position.x"
+  [style.grid-row]="pawn.position.y"
+  (click)="select()"
+>
+  <img [src]="pawn.image">
+</div>
