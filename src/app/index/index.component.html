@@ -2,3 +2,6 @@
 <a [routerLink]="['/']">Main</a>
 <a [routerLink]="['/newGame']">New Game</a>
 <a [routerLink]="['/loadGame']">Load Game</a>
+<div>
+  Player ID: <input #editedPlayerId id="playerId" [value]="getPlayerId()" placeholder="PlayerID" (change)="setPlayerId(editedPlayerId.value)">
+</div>

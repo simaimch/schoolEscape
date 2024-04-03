@@ -3,6 +3,15 @@
   <label for="name">Game name: </label>
   <input #editedGame id="name" [value]="game.name" placeholder="name" (change)="updateName(editedGame.value)">
 </div>
+<div>
+  Turn: {{game.playerTurn}} / {{idOfPlayerAtTurn}}
+  <div *ngIf="isPlayersTurn">
+    (Your turn)
+  </div>
+</div>
+<div>
+  Remaining moves: {{game.remainingMoves}}
+</div>
 
 <div id="wallInformation">
   <p *ngFor="let wall of wallsWithGlobalPositions">{{wall.position.position1.x}}:{{wall.position.position1.y}} / {{wall.position.position2.x}}:{{wall.position.position2.y}}</p>

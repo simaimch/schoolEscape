@@ -29,9 +29,15 @@ export class NewGameComponent {
     const newGame:Game = {
       name: 'lalala',
       pawns:{
-        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png'},
-        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png'},
+        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'player1'},
+        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'player2'},
       },
+      playerIds:{
+        'player1':'edufant',
+        'player2':'guest',
+      },
+      playerTurn:'player1',
+      remainingMoves:4,
       selectedPawnIndex:'',
       tiles: tiles
     };

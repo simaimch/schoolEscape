@@ -4,7 +4,7 @@ import { Game } from '../game';
 import { GameStorageService } from '../game-storage.service';
 import { TileComponent } from '../tile/tile.component';
 import { Tile } from '../tile';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { Pawn } from '../pawn';
 import { PawnComponent } from '../pawn/pawn.component';
 import { ReachablePositionComponent } from '../reachable-position/reachable-position.component';
@@ -12,6 +12,7 @@ import { Position } from '../position';
 import { Wall } from '../wall';
 import { BetweenPosition } from '../between-position';
 import { PositionServiceService } from '../position-service.service';
+import { PlayerStorageService } from '../player-storage.service';
 
 @Component({
   selector: 'app-game',
@@ -21,6 +22,7 @@ import { PositionServiceService } from '../position-service.service';
     ReachablePositionComponent,
     TileComponent,
     NgForOf,
+    NgIf,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.less'
@@ -33,6 +35,7 @@ export class GameComponent {
     private gameStorageService:GameStorageService,
     private activatedRoute:ActivatedRoute,
     private positionServiceService:PositionServiceService,
+    private playerStorageService:PlayerStorageService,
     ){
       this.gameId = Number(this.activatedRoute.snapshot.params['id']);
   }
@@ -43,10 +46,18 @@ export class GameComponent {
       return;
     pawn.position = position;
     this.updatePawn(null,pawn);
+    this.remainingMovesDecrease();
   }
 
   get game():Game{
     return this.gameStorageService.getGameById(this.gameId);
+  }
+
+  get nextPlayerIdentifier():string{
+    const playerIdentifiers = Object.keys(this.game.playerIds);
+    const currentPlayerIndex = playerIdentifiers.findIndex((identifier) => identifier == this.game.playerTurn);
+    const nextPlayerIndex = (currentPlayerIndex + 1) % playerIdentifiers.length;
+    return playerIdentifiers[nextPlayerIndex];
   }
 
   positionsAreAdjacent(position1:Position,position2:Position):boolean{
@@ -66,6 +77,25 @@ export class GameComponent {
     if(this.wallIsInBetween(position1,position2))
       return Infinity;
     return 1;
+  }
+
+  remainingMovesDecrease(dec:number=1){
+    let game =this.game;
+    game.remainingMoves -= 1;
+    if(game.remainingMoves < 1)
+      this.switchToNextPlayer();
+    else
+      this.gameStorageService.setGameById(this.gameId,game);
+
+  }
+
+
+
+  switchToNextPlayer(){
+    let game = this.game;
+    game.playerTurn = this.nextPlayerIdentifier;
+    game.remainingMoves = 4;
+    this.gameStorageService.setGameById(this.gameId,game);
   }
 
   get wallsWithGlobalPositions():Wall[]{
@@ -141,20 +171,6 @@ export class GameComponent {
     }
 
     return positions.map((p)=>p.position);
-
-    /*const x = position.x;
-    const y = position.y;
-    let positions: Position[] = [];
-    for(let xCheck = x - range; xCheck <= x + range; xCheck++)
-      for(let yCheck = y - range; yCheck <= y + range; yCheck++)
-        if(this.positionIsOnField({x:xCheck,y:yCheck})){
-          positions.push({x:xCheck,y:yCheck});
-        }
-
-    return positions;*/
-
-
-
   }
 
 
@@ -206,6 +222,21 @@ export class GameComponent {
     this.gameStorageService.setGameById(this.gameId,game);
   }
 
+  //#endregion
+
+  //#region Player
+  get playerId():string{
+    return this.playerStorageService.getPlayerId();
+  }
+
+  get isPlayersTurn():boolean{
+    return (this.playerId == this.idOfPlayerAtTurn)
+  }
+
+  get idOfPlayerAtTurn():string{
+    const game = this.game;
+    return game.playerIds[game.playerTurn];
+  }
   //#endregion
 
   //#region Tiles
