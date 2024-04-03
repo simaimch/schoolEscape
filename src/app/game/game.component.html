@@ -8,6 +8,7 @@
   <div *ngIf="isPlayersTurn">
     (Your turn)
   </div>
+  <a (click)="switchToNextPlayer()">DEBUG: Next player</a>
 </div>
 <div>
   Remaining moves: {{game.remainingMoves}}
