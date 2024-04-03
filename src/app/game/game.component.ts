@@ -137,7 +137,11 @@ export class GameComponent {
   }
 
   get reachablePositions():Position[]{
+    if(!this.isPlayersTurn)
+      return [];
     if(!this.selectedPawn)
+      return [];
+    if(this.selectedPawn.ownerId != this.game.playerTurn)
       return [];
     return this.reachablePositionsByPositionRangeAndMovement(this.selectedPawn.position,2);
   }
