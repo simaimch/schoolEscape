@@ -18,23 +18,28 @@
   <p *ngFor="let wall of wallsWithGlobalPositions">{{wall.position.position1.x}}:{{wall.position.position1.y}} / {{wall.position.position2.x}}:{{wall.position.position2.y}}</p>
 </div>
 
-<div id="field">
-  <app-tile
-    *ngFor="let tile of tiles"
-    [tile]="tile"
+<div id="gameBoard">
+  <div id="field">
+    <app-tile
+      *ngFor="let tile of tiles"
+      [tile]="tile"
 
-  ></app-tile>
+    ></app-tile>
 
-  <app-reachable-position
-    *ngFor="let rpos of reachablePositions"
-    [rpos]="rpos"
-    (activatePosition)="activatePosition($event)"
-  ></app-reachable-position>
+    <app-reachable-position
+      *ngFor="let rpos of reachablePositions"
+      [rpos]="rpos"
+      (activatePosition)="activatePosition($event)"
+    ></app-reachable-position>
 
-  <app-pawn
-    *ngFor="let keyValuePair of getAllPawnsAsKeyValuePair()"
-    [pawn]="keyValuePair.value"
-    [pawnId]="keyValuePair.key"
-    (updateSelectedPawn)="updateSelectedPawn($event)"
-  ></app-pawn>
+    <app-pawn
+      *ngFor="let keyValuePair of getAllPawnsAsKeyValuePair()"
+      [pawn]="keyValuePair.value"
+      [pawnId]="keyValuePair.key"
+      (updateSelectedPawn)="updateSelectedPawn($event)"
+    ></app-pawn>
+  </div>
+  <div id="betweenFields">
+    
+  </div>
 </div>

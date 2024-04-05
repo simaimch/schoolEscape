@@ -1,9 +1,14 @@
+#gameBoard{
+  width: 60vw;
+  margin: 0 auto;
+  position: relative;
+}
+
 #field{
   display: grid;
   grid-template-columns: repeat(10, 6vw);
   grid-auto-flow: row dense;
-  width: 60vw;
-  margin: 0 auto;
+  
   grid-auto-rows: 6vw;
 }
 
@@ -12,6 +17,13 @@
 #field>app-reachable-position
 {
   display: contents;
+}
+#betweenFields{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
 #wallInformation{
