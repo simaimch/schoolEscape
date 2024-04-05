@@ -1,2 +1,8 @@
 <h1>New Game</h1>
+
+<div>
+    Opponent ID: <input #opponentPlayerId id="opponentPlayerId" [value]="opponentId" placeholder="OpponentID" (change)="opponentId = opponentPlayerId.value">
+</div>
+
+
 <button (click)="startGame()">Start</button>

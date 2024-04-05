@@ -5,6 +5,7 @@ import { GameStorageService } from '../game-storage.service';
 import { Game } from '../game';
 import { Tile } from '../tile';
 import { HttpClientModule } from '@angular/common/http';
+import { PlayerStorageService } from '../player-storage.service';
 
 @Component({
   selector: 'app-new-game',
@@ -14,13 +15,22 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './new-game.component.less'
 })
 export class NewGameComponent {
+
+  opponentId:string='guest';
+
   constructor(
     private router:Router,
-    private gameStorageService:GameStorageService
+    private gameStorageService:GameStorageService,
+    private playerStorageService: PlayerStorageService,
     ){}
 
   startGame(){
     const gameId: number = this.gameStorageService.getFreeId();
+
+    const playerIds = [
+      this.playerStorageService.getPlayerId(),
+      this.opponentId,
+    ];
 
     let tiles:Tile[] = [];
     for(let x=0;x<=1;x++)
@@ -30,14 +40,11 @@ export class NewGameComponent {
     const newGame:Game = {
       name: 'lalala',
       pawns:{
-        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'edufant'},
-        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'guest'},
+        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:playerIds[0]},
+        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:playerIds[1]},
       },
-      playerIds:[
-        'edufant',
-        'guest',
-      ],
-      playerTurn:'player1',
+      playerIds:playerIds,
+      playerTurn:this.playerStorageService.getPlayerId(),
       remainingMoves:4,
       selectedPawnIndex:'',
       tiles: tiles
