@@ -1,18 +1,45 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { Game } from './game';
+import { Observable, catchError, of, shareReplay, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { PlayerStorageService } from './player-storage.service';
+import { RemoteServerService } from './remote-server.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameStorageService {
 
-  constructor(private localStorage:LocalStorageService) { }
+  constructor(
+    private localStorage:LocalStorageService,
+    private http: HttpClient,
+    private playerStorage: PlayerStorageService,
+    private remoteServer: RemoteServerService,
+    ) { }
 
   deleteGame(gameId:number){
     let allGames = this.getAllGames();
     delete allGames[gameId];
-    this.localStorage.setItem('game',JSON.stringify(allGames));
+    this.localStorage.setItemRaw('game',JSON.stringify(allGames));
+  }
+
+  private cachedOwnedGames$: Observable<{[key:string]:Game}> | undefined;
+
+  getOwnedGames(forceRefresh=false):Observable<{[key:string]:Game}>{
+    if(forceRefresh)
+      this.cachedOwnedGames$ = undefined;
+    if (!this.cachedOwnedGames$) {
+      this.cachedOwnedGames$ = this.http.get<any>(this.remoteServer.getRequestUrl('gamesOwned',{player:this.playerStorage.getPlayerId()})).pipe(
+        tap(data => console.log('Fetched data', data)),
+        catchError(error => {
+          console.error('Error fetching data', error);
+          return of(null); // Return an empty observable to prevent errors from propagating
+        }),
+        shareReplay(1) // Cache the last emitted value and replay it to new subscribers
+      );
+    }
+    return this.cachedOwnedGames$;
   }
 
   getAllGames():{[key:string]:Game}{
@@ -47,6 +74,6 @@ export class GameStorageService {
   setGameById(id:number,newGameValue:Game){
     let allGames = this.getAllGames();
     allGames[id] = newGameValue;
-    this.localStorage.setItem('game',JSON.stringify(allGames));
+    this.localStorage.setItemRaw('game',JSON.stringify(allGames));
   }
 }

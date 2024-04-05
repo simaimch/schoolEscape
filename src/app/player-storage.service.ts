@@ -15,6 +15,6 @@ export class PlayerStorageService {
   }
 
   setPlayerId(newPlayerId:string){
-    this.localStorage.setItem('playerId',newPlayerId);
+    this.localStorage.setItemRaw('playerId',newPlayerId);
   }
 }

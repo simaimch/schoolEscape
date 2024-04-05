@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { GameStorageService } from '../game-storage.service';
 import { Game } from '../game';
 import { Tile } from '../tile';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-game',
   standalone: true,
-  imports: [],
+  imports: [HttpClientModule],
   templateUrl: './new-game.component.html',
   styleUrl: './new-game.component.less'
 })
@@ -29,13 +30,13 @@ export class NewGameComponent {
     const newGame:Game = {
       name: 'lalala',
       pawns:{
-        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'player1'},
-        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'player2'},
+        'A':{position:{x:2,y:2},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'edufant'},
+        'B':{position:{x:4,y:4},image:'https://miro.medium.com/v2/resize:fit:1400/0*p1AF_fHdLd2JkoDA.png',ownerId:'guest'},
       },
-      playerIds:{
-        'player1':'edufant',
-        'player2':'guest',
-      },
+      playerIds:[
+        'edufant',
+        'guest',
+      ],
       playerTurn:'player1',
       remainingMoves:4,
       selectedPawnIndex:'',

@@ -54,7 +54,7 @@ export class GameComponent {
   }
 
   get nextPlayerIdentifier():string{
-    const playerIdentifiers = Object.keys(this.game.playerIds);
+    const playerIdentifiers = this.game.playerIds;
     const currentPlayerIndex = playerIdentifiers.findIndex((identifier) => identifier == this.game.playerTurn);
     const nextPlayerIndex = (currentPlayerIndex + 1) % playerIdentifiers.length;
     return playerIdentifiers[nextPlayerIndex];
@@ -239,7 +239,7 @@ export class GameComponent {
 
   get idOfPlayerAtTurn():string{
     const game = this.game;
-    return game.playerIds[game.playerTurn];
+    return game.playerTurn;
   }
   //#endregion
 

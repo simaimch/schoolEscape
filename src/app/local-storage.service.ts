@@ -7,23 +7,36 @@ export class LocalStorageService {
 
   constructor() { }
 
-  // Set a value in local storage
-  setItem(key: string, value: string): void {
-    localStorage.setItem(key, value);
+  getStorageEngine(useLocalStorage=true):Storage{
+    if(useLocalStorage)
+      return localStorage;
+    return sessionStorage;
   }
 
-  // Get a value from local storage
-  getItem(key: string): string | null {
-    return localStorage.getItem(key);
+  clear(useLocalStorage=true): void {
+    this.getStorageEngine(useLocalStorage).clear();
   }
 
-  // Remove a value from local storage
-  removeItem(key: string): void {
-    localStorage.removeItem(key);
+  getItem(key: string,useLocalStorage=true): string | null {
+    return this.getStorageEngine(useLocalStorage).getItem(key);
   }
 
-  // Clear all items from local storage
-  clear(): void {
-    localStorage.clear();
+  getItemParsed<T>(key: string,def:T,useLocalStorage=true):T{
+    let result = this.getItem(key,useLocalStorage);
+    if(!result)
+      return def;
+    return JSON.parse(result);
+  }
+
+  removeItem(key: string,useLocalStorage=true): void {
+    this.getStorageEngine(useLocalStorage).removeItem(key);
+  }
+
+  setItem(key:string, value: any, useLocalStorage=true):void{
+    this.setItemRaw(key,JSON.stringify(value),useLocalStorage);
+  }
+
+  setItemRaw(key: string, value: string,useLocalStorage=true): void {
+    this.getStorageEngine(useLocalStorage).setItem(key, value);
   }
 }
